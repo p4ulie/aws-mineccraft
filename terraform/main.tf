@@ -91,9 +91,7 @@ resource "aws_instance" "minecraft-server" {
   # this should be on port 80
   provisioner "remote-exec" {
     inline = [
-      "sudo apt-get -y update",
-      "sudo apt-get -y install nginx",
-      "sudo service nginx start",
-    ]
+      "sudo yum update",
+   ]
   }
 }
