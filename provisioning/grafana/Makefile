@@ -28,9 +28,9 @@ install: download
 .PHONY: uninstall
 uninstall:
 	@echo "Uninstalling $(application) package..."
-	@systemctl | grep $(application_service).service &>/dev/null && systemctl stop $(application_service) || echo -n ""
-	@systemctl disable $(application_service)
-	@yum remove -y $(package_name)
+	# @systemctl | grep $(application_service).service &>/dev/null && systemctl stop $(application_service) || echo -n ""
+	# @systemctl disable $(application_service)
+	@yum remove -y $(application)
 
 
 .PHONY: start
@@ -45,7 +45,7 @@ stop:
 
 .PHONY: clean
 clean:
-	@echo "Deleting downloaded tar.gz files..."
+	@echo "Deleting downloaded *.rpm files..."
 	@rm -rf *.rpm
 
 
