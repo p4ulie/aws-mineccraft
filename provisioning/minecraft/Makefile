@@ -50,6 +50,9 @@ install: dirs adduser
 	@cp -f $(minecraft_filename) "$(minecraft_dir_bin)"
 	@chown $(minecraft_user):$(minecraft_group) "$(minecraft_dir_bin)/$(minecraft_filename)"
 
+	@echo "eula=true" > "$(minecraft_dir_data)/eula.txt"
+	@chown $(minecraft_user):$(minecraft_group) "$(minecraft_dir_data)/eula.txt"
+
 
 .PHONY: service_install
 service_install:
