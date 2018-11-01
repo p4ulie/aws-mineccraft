@@ -15,7 +15,7 @@ minecraft_filename = minecraft_server.jar
 
 
 .PHONY: minecraft
-minecraft: java minecraft_download install service_install
+minecraft: java download install service_install
 
 
 .PHONY: java
@@ -37,15 +37,15 @@ dirs: adduser
 	@chown -R $(minecraft_user):$(minecraft_group) $(minecraft_dirs)
 
 
-.PHONY: minecraft_download
-minecraft_download:
+.PHONY: download
+download:
 	@echo "Downloading minecraft server binary..."
 	@curl --remote-time --progress-bar --location \
         --time-cond "$(minecraft_filename)" -o "$(minecraft_filename)" "$(minecraft_url)"
 
 
 .PHONY: install
-install: dirs adduser
+install: dirs adduser download
 	@echo "Installing minecraft server $(minecraft_filename) to $(minecraft_dir_bin)"
 	@cp -f $(minecraft_filename) "$(minecraft_dir_bin)"
 	@chown $(minecraft_user):$(minecraft_group) "$(minecraft_dir_bin)/$(minecraft_filename)"
@@ -73,7 +73,7 @@ service_uninstall:
 .PHONY: clean
 clean:
 	@echo "Deleting downloaded jar files..."
-	@rm -rf "*.jar"
+	@rm -rf *.jar
 
 
 .PHONY: distclean
@@ -81,4 +81,4 @@ distclean: clean service_uninstall
 	@echo "Deleting $(minecraft_dirs)..."
 	@rm -rf $(minecraft_dirs)
 	@echo "Deleting user $(minecraft_user)..."
-	@id -u $(minecraft_user) &>/dev/null || useradd --system $(minecraft_user)
+	@id -u $(minecraft_user) &>/dev/null && userdel $(minecraft_user) || echo -n ""
