@@ -1,59 +1,69 @@
-prometheus_url = https://github.com/prometheus/prometheus/releases/download/v2.4.3/prometheus-2.4.3.linux-amd64.tar.gz
+application = prometheus
+application_service = $(application)
 
-prometheus_dir = /opt/prometheus
+download_url = https://github.com/prometheus/prometheus/releases/download/v2.4.3/prometheus-2.4.3.linux-amd64.tar.gz
 
-prometheus_user = prometheus
-prometheus_group = $(prometheus_user)
+application_dir = /opt/$(application)
 
-prometheus_filename = $(notdir $(prometheus_url))
-prometheus_dirname = $(basename $(basename $(prometheus_filename)))
+application_user = $(application)
+application_group = $(application_user)
+
+package_filename = $(notdir $(download_url))
+application_dirname = $(basename $(basename $(package_filename)))
 
 
-.PHONY: prometheus
-prometheus:  download install service_install
+.PHONY: $(application)
+$(application):  download install service_install
 
 
 .PHONY: adduser
 adduser:
-	@echo "Adding user $(prometheus_user)..."
-	@id -u $(prometheus_user) &>/dev/null || useradd --system $(prometheus_user)
+	@echo "Adding user $(application_user)..."
+	@id -u $(application_user) &>/dev/null || useradd --system $(application_user)
 
 
 .PHONY: download
 download:
-	@echo "Downloading prometheus binary..."
+	@echo "Downloading $(application) binary..."
 	@curl --remote-time --progress-bar --location \
-        --time-cond "$(prometheus_filename)" -o "$(prometheus_filename)" "$(prometheus_url)"
+        --time-cond "$(package_filename)" -o "$(package_filename)" "$(download_url)"
 
 
 .PHONY: install
 install: adduser download
-	@echo "Installing prometheus binary..."
-	tar --directory=/opt -zxvf "$(prometheus_filename)"
+	@echo "Installing $(application) binary..."
+	@tar --directory=/opt -zxvf "$(package_filename)"
 
-	chown -R $(prometheus_user):$(prometheus_group) $(prometheus_dir)*
+	@chown -R $(application_user):$(application_group) $(application_dir)*
 
-	rm -f /opt/prometheus
-	ln -s "/opt/$(prometheus_dirname)" "$(prometheus_dir)"
-
-	rm -f /etc/prometheus.yml
-	ln -s "$(prometheus_dir)/prometheus.yml" /etc
+	@rm -f "$(application_dir)"
+	@ln -s "/opt/$(application_dirname)" "$(application_dir)"
 
 
 .PHONY: service_install
 service_install:
-	@echo "Installing prometheus service..."
-	@cp -f resources/prometheus.service /etc/systemd/system/prometheus.service
+	@echo "Installing $(application) service..."
+	@cp -f resources/$(application_service).service /etc/systemd/system/$(application_service).service
 	@systemctl daemon-reload
-	@systemctl enable prometheus
+	@systemctl enable $(application_service)
 
 
 .PHONY: service_uninstall
 service_uninstall:
-	@echo "Removing prometheus service..."
-	@systemctl | grep prometheus.service &>/dev/null && systemctl stop prometheus || echo -n ""
-	@rm -rf /etc/systemd/system/prometheus.service
+	@echo "Removing $(application) service..."
+	@systemctl | grep $(application_service).service &>/dev/null && systemctl stop $(application_service) || echo -n ""
+	@rm -rf /etc/systemd/system/$(application_service).service
 	@systemctl daemon-reload
+
+
+.PHONY: start
+start:
+	@systemctl start $(application_service)
+
+
+.PHONY: stop
+stop:
+	@systemctl stop $(application_service)
 
 
 .PHONY: clean
@@ -64,9 +74,8 @@ clean:
 
 .PHONY: distclean
 distclean: clean service_uninstall
-	@echo "Deleting prometheus config files and directories ..."
-	@rm -rf $(prometheus_dir)*
-	@rm -f /etc/prometheus.yml
+	@echo "Deleting  $(application) config files and directories ..."
+	@rm -rf $(application_dir)*
 
-	@echo "Deleting user $(prometheus_user)..."
-	@id -u $(prometheus_user) &>/dev/null && userdel $(prometheus_user) || echo -n ""
+	@echo "Deleting user $(application_user)..."
+	@id -u $(application_user) &>/dev/null && userdel $(application_user) || echo -n ""
