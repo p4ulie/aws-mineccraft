@@ -1,21 +1,25 @@
+application = minecraft
+application_service = $(application)
+
 java_package = java-1.8.0-openjdk-headless
 
-minecraft_url = https://launcher.mojang.com/v1/objects/fe123682e9cb30031eae351764f653500b7396c9/server.jar
+download_url = https://launcher.mojang.com/v1/objects/fe123682e9cb30031eae351764f653500b7396c9/server.jar
 
-minecraft_dir_bin = /minecraft/bin
-minecraft_dir_data = /minecraft/data
-minecraft_dirs = /minecraft $(minecraft_dir_bin) $(minecraft_dir_data)
+application_basedir = /opt/$(application)
+application_dir_bin = $(application_basedir)/bin
+application_dir_data = $(application_basedir)/data
+application_dirs = $(application_basedir) $(application_dir_bin) $(application_dir_data)
 
-minecraft_user = minecraft
-minecraft_group = $(minecraft_user)
+application_user = $(application)
+application_group = $(application_user)
 
 #current_timestamp = $(shell date +%Y%m%d-%H%M%S)
-#minecraft_filename = minecraft_server_$(current_timestamp).jar
-minecraft_filename = minecraft_server.jar
+#package_filename = minecraft_server_$(current_timestamp).jar
+package_filename = minecraft_server.jar
 
 
-.PHONY: minecraft
-minecraft: java download install service_install
+.PHONY: $(application)
+$(application): java download install service_install
 
 
 .PHONY: java
@@ -26,48 +30,58 @@ java:
 
 .PHONY: adduser
 adduser:
-	@echo "Adding user $(minecraft_user)..."
-	@id -u $(minecraft_user) &>/dev/null || useradd --system $(minecraft_user)
+	@echo "Adding user $(application_user)..."
+	@id -u $(application_user) &>/dev/null || useradd --system $(application_user)
 
 
 .PHONY: dirs
 dirs: adduser
-	@echo "Creating $(minecraft_dirs)..."
-	@mkdir -p $(minecraft_dirs)
-	@chown -R $(minecraft_user):$(minecraft_group) $(minecraft_dirs)
+	@echo "Creating $(application_dirs)..."
+	@mkdir -p $(application_dirs)
+	@chown -R $(application_user):$(application_group) $(application_dirs)
 
 
 .PHONY: download
 download:
-	@echo "Downloading minecraft server binary..."
+	@echo "Downloading $(application) server binary..."
 	@curl --remote-time --progress-bar --location \
-        --time-cond "$(minecraft_filename)" -o "$(minecraft_filename)" "$(minecraft_url)"
+        --time-cond "$(package_filename)" -o "$(package_filename)" "$(download_url)"
 
 
 .PHONY: install
 install: dirs adduser download
-	@echo "Installing minecraft server $(minecraft_filename) to $(minecraft_dir_bin)"
-	@cp -f $(minecraft_filename) "$(minecraft_dir_bin)"
-	@chown $(minecraft_user):$(minecraft_group) "$(minecraft_dir_bin)/$(minecraft_filename)"
+	@echo "Installing $(application) server $(package_filename) to $(application_dir_bin)"
+	@cp -f $(package_filename) "$(application_dir_bin)"
+	@chown $(application_user):$(application_group) "$(application_dir_bin)/$(package_filename)"
 
-	@echo "eula=true" > "$(minecraft_dir_data)/eula.txt"
-	@chown $(minecraft_user):$(minecraft_group) "$(minecraft_dir_data)/eula.txt"
+	@echo "eula=true" > "$(application_dir_data)/eula.txt"
+	@chown $(application_user):$(application_group) "$(application_dir_data)/eula.txt"
 
 
 .PHONY: service_install
 service_install:
-	@echo "Installing minecraft service..."
-	@cp -f resources/minecraft.service /etc/systemd/system/minecraft.service
+	@echo "Installing $(application) service..."
+	@cp -f resources/$(application_service).service /etc/systemd/system/$(application_service).service
 	@systemctl daemon-reload
-	@systemctl enable minecraft
+	@systemctl enable $(application_service)
 
 
 .PHONY: service_uninstall
 service_uninstall:
-	@echo "Removing minecraft service..."
-	@systemctl | grep minecraft.service &>/dev/null && systemctl stop minecraft || echo -n ""
-	@rm -rf /etc/systemd/system/minecraft.service
+	@echo "Removing $(application) service..."
+	@systemctl | grep $(application_service).service &>/dev/null && systemctl stop $(application_service) || echo -n ""
+	@rm -rf /etc/systemd/system/$(application_service).service
 	@systemctl daemon-reload
+
+
+.PHONY: start
+start:
+	@systemctl start $(application_service)
+
+
+.PHONY: stop
+stop:
+	@systemctl stop $(application_service)
 
 
 .PHONY: clean
@@ -78,7 +92,7 @@ clean:
 
 .PHONY: distclean
 distclean: clean service_uninstall
-	@echo "Deleting $(minecraft_dirs)..."
-	@rm -rf $(minecraft_dirs)
-	@echo "Deleting user $(minecraft_user)..."
-	@id -u $(minecraft_user) &>/dev/null && userdel $(minecraft_user) || echo -n ""
+	@echo "Deleting $(application_dirs)..."
+	@rm -rf $(application_dirs)
+	@echo "Deleting user $(application_user)..."
+	@id -u $(application_user) &>/dev/null && userdel $(application_user) || echo -n ""
