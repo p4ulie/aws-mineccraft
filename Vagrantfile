@@ -24,7 +24,16 @@ Vagrant.configure("2") do |config|
   # accessing "localhost:8080" will access port 80 on the guest machine.
   # NOTE: This will enable public access to the opened port
   # config.vm.network "forwarded_port", guest: 80, host: 8080
+
+  # Minecraft
   config.vm.network "forwarded_port", guest: 25565, host: 25565
+
+  # Prometheus
+  config.vm.network "forwarded_port", guest: 9090, host: 9090
+
+  # Grafana
+  config.vm.network "forwarded_port", guest: 3000, host: 3000
+
 
   # Create a forwarded port mapping which allows access to a specific port
   # within the machine from a port on the host machine and only allow access
