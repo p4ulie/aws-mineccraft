@@ -34,6 +34,8 @@ Vagrant.configure("2") do |config|
   # Grafana
   config.vm.network "forwarded_port", guest: 3000, host: 3000
 
+  # jstatd
+  config.vm.network "forwarded_port", guest: 1099, host: 1099
 
   # Create a forwarded port mapping which allows access to a specific port
   # within the machine from a port on the host machine and only allow access
@@ -62,10 +64,10 @@ Vagrant.configure("2") do |config|
   config.vm.provider "virtualbox" do |vb|
     # Display the VirtualBox GUI when booting the machine
     vb.gui = false
-    vb.cpus = 4
+    vb.cpus = 2
 
     # Customize the amount of memory on the VM:
-    vb.memory = "4096"
+    vb.memory = "2048"
   end
   #
   # View the documentation for the provider you are using for more
