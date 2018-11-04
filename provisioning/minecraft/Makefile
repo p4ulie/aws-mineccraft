@@ -96,6 +96,7 @@ clean:
 .PHONY: distclean
 distclean: clean service_uninstall
 	@echo "Deleting $(application_dirs)..."
-	@rm -rf $(application_dirs)
+	@#rm -rf $(application_dirs)
+	@rm -rf $(application_basedir) $(application_dir_bin)
 	@echo "Deleting user $(application_user)..."
 	@id -u $(application_user) &>/dev/null && userdel $(application_user) || echo -n ""
