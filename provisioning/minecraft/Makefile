@@ -5,7 +5,9 @@ java_package = java-1.8.0-openjdk-headless
 
 download_url = https://launcher.mojang.com/v1/objects/fe123682e9cb30031eae351764f653500b7396c9/server.jar
 
-application_basedir = /opt/$(application)
+base_dir = /opt
+
+application_basedir = $(base_dir)/$(application)
 application_dir_bin = $(application_basedir)/bin
 application_dir_data = $(application_basedir)/data
 application_dirs = $(application_basedir) $(application_dir_bin) $(application_dir_data)

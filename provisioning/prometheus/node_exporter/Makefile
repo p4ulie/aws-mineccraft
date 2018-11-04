@@ -5,13 +5,15 @@ application_service = $(application)
 
 download_url = https://github.com/prometheus/$(application)/releases/download/v$(application_version)/$(application)-$(application_version).linux-amd64.tar.gz
 
-application_dir = /opt/$(application)
+base_dir = /opt
 
-application_user = $(application)
+application_dir = $(base_dir)/$(application)
+
+application_user = prometheus
 application_group = $(application_user)
 
 package_filename = $(notdir $(download_url))
-application_dirname = $(basename $(basename $(package_filename)))
+application_version_dir = $(basename $(basename $(package_filename)))
 
 
 .PHONY: $(application)
@@ -34,12 +36,12 @@ download:
 .PHONY: install
 install: adduser download
 	@echo "Installing $(application) binary..."
-	@tar --directory=/opt -zxvf "$(package_filename)"
+	@tar --directory=$(base_dir) -zxvf "$(package_filename)"
 
 	@chown -R $(application_user):$(application_group) $(application_dir)*
 
 	@rm -f "$(application_dir)"
-	@ln -s "/opt/$(application_dirname)" "$(application_dir)"
+	@ln -fs "$(base_dir)/$(application_version_dir)" "$(application_dir)"
 
 
 .PHONY: service_install

@@ -5,17 +5,19 @@ application_service = $(application)
 
 download_url = https://github.com/prometheus/$(application)/releases/download/v$(application_version)/$(application)-$(application_version).linux-amd64.tar.gz
 
-application_dir = /opt/$(application)
+base_dir = /opt
+
+application_dir = $(base_dir)/$(application)
 
 application_user = $(application)
 application_group = $(application_user)
 
 package_filename = $(notdir $(download_url))
-application_dirname = $(basename $(basename $(package_filename)))
+application_version_dir = $(base_dir)/$(basename $(basename $(package_filename)))
 
 
 .PHONY: $(application)
-$(application):  download install service_install
+$(application):  download install service_install config_install
 
 
 .PHONY: adduser
@@ -31,18 +33,22 @@ download:
         --time-cond "$(package_filename)" -o "$(package_filename)" "$(download_url)"
 
 
+.PHONY: config_install
+config_install:
+	@# copy configuration file
+	@cp -f resources/prometheus.yml $(application_dir)
+
+
 .PHONY: install
 install: adduser download
 	@echo "Installing $(application) binary..."
-	@tar --directory=/opt -zxvf "$(package_filename)"
+	@tar --directory=$(base_dir) -zxvf "$(package_filename)"
 
 	@chown -R $(application_user):$(application_group) $(application_dir)*
 
 	@rm -f "$(application_dir)"
-	@ln -s "/opt/$(application_dirname)" "$(application_dir)"
+	@ln -fs "$(application_version_dir)" "$(application_dir)"
 
-	@# copy configuration file
-	@cp -f resources/prometheus.yml /opt/prometheus/
 
 
 .PHONY: service_install

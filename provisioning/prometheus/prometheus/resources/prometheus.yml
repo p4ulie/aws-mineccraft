@@ -32,3 +32,9 @@ scrape_configs:
 
     static_configs:
     - targets: ['localhost:9100']
+
+
+  - job_name: 'jmx_exporter'
+
+    static_configs:
+    - targets: ['localhost:9200']
