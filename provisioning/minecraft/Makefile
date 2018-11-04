@@ -1,7 +1,8 @@
 application = minecraft
 application_service = $(application)
 
-java_package = java-1.8.0-openjdk-headless
+#java_package = java-1.8.0-openjdk-headless
+java_package = java-1.8.0-openjdk-devel
 
 download_url = https://launcher.mojang.com/v1/objects/fe123682e9cb30031eae351764f653500b7396c9/server.jar
 
