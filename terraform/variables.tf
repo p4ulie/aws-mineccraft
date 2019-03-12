@@ -21,17 +21,7 @@ variable "aws_region" {
   default     = "eu-west-1"
 }
 
-# Amazon Linux 2 AMI 2.0.20181008 x86_64 HVM gp2
-# amzn2-ami-hvm-2.0.20181008-x86_64-gp2
-variable "aws_amis" {
-  default = {
-    eu-west-1 = "ami-0922553b7b0369273"
-  }
-}
-
 variable "aws_instance_type" {
   description = "AWS instance type."
   default     = "t2.micro"
 }
-
-

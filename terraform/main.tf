@@ -8,7 +8,8 @@ resource "aws_instance" "minecraft-server" {
   instance_type = "${var.aws_instance_type}"
 
   # Lookup the correct AMI based on the region we specified
-  ami = "${lookup(var.aws_amis, var.aws_region)}"
+  # ami = "${lookup(var.aws_amis, var.aws_region)}"
+  ami = "${data.aws_ami.amazon_linux_2.id}"
 
   # The name of our SSH keypair we created above.
   key_name = "${aws_key_pair.auth.id}"
