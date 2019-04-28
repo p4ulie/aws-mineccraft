@@ -1,5 +1,4 @@
-data "aws_region" "current" {
-}
+data "aws_region" "current" {}
 
 output "region" {
   value = "${data.aws_region.current.name}"
@@ -7,4 +6,8 @@ output "region" {
 
 output "minecraft-server-id" {
   value = "${aws_instance.minecraft-server.id}"
+}
+
+output "minecraft-server-name" {
+  value = "${var.aws_instance_name}"
 }
