@@ -1,18 +1,11 @@
+# Amazon Linux 2 AMI
 data "aws_ami" "amazon_linux_2" {
-  # CentOS organization id is 679593333241
+  # Amazon organization id is 137112412989
   owners = [
-    "679593333241",
+    "amazon",
   ]
 
   most_recent = true
-
-  filter {
-    name = "name"
-
-    values = [
-      "Amazon Linux 2 *",
-    ]
-  }
 
   filter {
     name = "architecture"
@@ -27,6 +20,24 @@ data "aws_ami" "amazon_linux_2" {
 
     values = [
       "ebs",
+    ]
+  }
+
+  filter {
+    name   = "virtualization-type"
+    values = ["hvm"]
+  }
+
+  filter {
+    name   = "state"
+    values = ["available"]
+  }
+
+  filter {
+    name = "name"
+
+    values = [
+      "amzn2-ami-hvm-*-gp2",
     ]
   }
 }
