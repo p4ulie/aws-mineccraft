@@ -8,7 +8,8 @@ connect.
 
 Example: ~/.ssh/aws-minecraft.pub
 DESCRIPTION
-  default     = "~/.ssh/aws-minecraft.pub"
+
+  default = "~/.ssh/aws-minecraft.pub"
 }
 
 variable "ssh_key_name" {

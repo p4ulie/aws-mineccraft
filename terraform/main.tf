@@ -26,6 +26,6 @@ resource "aws_instance" "minecraft-server" {
     inline = [
       "sudo yum -y update",
       "sudo yum -y install tmux mc",
-  ]
+    ]
   }
 }
