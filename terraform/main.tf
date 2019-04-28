@@ -19,6 +19,10 @@ resource "aws_instance" "minecraft-server" {
 
   subnet_id = "${aws_subnet.default.id}"
 
+  tags {
+    Name = "${var.aws_instance_name}"
+  }
+
   # We run a remote provisioner on the instance after creating it.
   # In this case, we just install nginx and start it. By default,
   # this should be on port 80

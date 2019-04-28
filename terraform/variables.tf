@@ -26,3 +26,8 @@ variable "aws_instance_type" {
   description = "AWS instance type."
   default     = "t2.micro"
 }
+
+variable "aws_instance_name" {
+  description = "AWS instance name."
+  default     = "Minecraft server"
+}
