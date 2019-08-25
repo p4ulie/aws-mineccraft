@@ -1,7 +1,10 @@
 resource "aws_instance" "minecraft_server" {
   instance_type = "${var.aws_instance_type}"
-  ami           = "${var.ami_default}"
-  key_name      = "${aws_key_pair.minecraft_ssh_key.key_name}"
+
+  # ami           = "${var.ami_default}"
+  ami = "${var.ami_custom == "" ? var.ami_default : var.ami_custom}"
+
+  key_name = "${aws_key_pair.minecraft_ssh_key.key_name}"
 
   iam_instance_profile = "minecraft_server_instance_profile"
 
@@ -34,7 +37,8 @@ resource "aws_instance" "minecraft_server" {
   # }
 
   # generated script for provision the instance
-  user_data = "${base64encode(data.template_file.instance_provisioning.rendered)}"
+  # user_data = "${base64encode(data.template_file.instance_provisioning.rendered)}"
+  user_data = "${var.ami_custom == "" ? base64encode(data.template_file.instance_provisioning.rendered) : base64encode(data.template_file.instance_configuration.rendered)}"
 }
 
 resource "aws_route53_record" "minecraft_server" {

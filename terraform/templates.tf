@@ -10,6 +10,17 @@ data "template_file" "instance_provisioning" {
   }
 }
 
+data "template_file" "instance_configuration" {
+  template = "${file("templates/instance_configuration.tpl")}"
+
+  vars = {
+    MINECRAFT_USER           = "${var.minecraft_user}"
+    MINECRAFT_GROUP          = "${var.minecraft_group}"
+    MINECRAFT_DIRECTORY      = "${var.minecraft_directory}"
+    MINECRAFT_S3_BUCKET_NAME = "${var.s3_bucket_name}"
+  }
+}
+
 data "template_file" "minecraft_systemd_service" {
   template = "${file("templates/minecraft_systemd_service.tpl")}"
 
