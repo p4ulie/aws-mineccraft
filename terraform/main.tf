@@ -1,35 +1,41 @@
-# https://github.com/terraform-providers/terraform-provider-aws
-
-resource "aws_instance" "minecraft-server" {
-  connection {
-    user = "ec2-user"
-  }
-
+resource "aws_instance" "minecraft_server" {
   instance_type = "${var.aws_instance_type}"
-
-  # Lookup the correct AMI based on the region we specified
-  # ami = "${lookup(var.aws_amis, var.aws_region)}"
-  ami = "${data.aws_ami.amazon_linux_2.id}"
-
-  # The name of our SSH keypair we created above.
-  key_name = "${aws_key_pair.auth.id}"
+  ami           = "${var.ami_default}"
+  key_name      = "${aws_key_pair.minecraft_ssh_key.id}"
 
   # Our Security group to allow network access to specified ports (SSH, ...)
-  vpc_security_group_ids = ["${aws_security_group.default.id}"]
-
-  subnet_id = "${aws_subnet.default.id}"
+  vpc_security_group_ids = ["${aws_security_group.minecraft_server.id}"]
+  subnet_id              = "${aws_subnet.minecraft_server.id}"
 
   tags {
     Name = "${var.aws_instance_name}"
   }
 
-  # We run a remote provisioner on the instance after creating it.
-  # In this case, we just install nginx and start it. By default,
-  # this should be on port 80
+  connection {
+    user = "ec2-user"
+  }
+
+  # Copies generated SystemD service file
+  provisioner "file" {
+    content     = "${data.template_file.instance_provisioning.rendered}"
+    destination = "/home/ec2-user/minecraft.service"
+  }
+
   provisioner "remote-exec" {
     inline = [
-      "sudo yum -y update",
-      "sudo yum -y install tmux mc",
+      "sudo mv /home/ec2-user/minecraft.service /etc/systemd/system/minecraft.service",
+      "sudo daemon-reload",
     ]
   }
+
+  # generated script for provision the instance
+  user_data = "${base64encode(data.template_file.instance_provisioning.rendered)}"
+}
+
+resource "aws_route53_record" "minecraft_server" {
+  zone_id = "${aws_route53_zone.minecraft_server.zone_id}"
+  name    = "minecraft_server"
+  type    = "CNAME"
+  ttl     = "300"
+  records = ["${aws_instance.minecraft_server.public_dns}"]
 }

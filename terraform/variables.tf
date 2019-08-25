@@ -1,16 +1,6 @@
-# https://github.com/terraform-providers/terraform-provider-aws
-
-variable "ssh_public_key_path" {
-  description = <<DESCRIPTION
-Path to the SSH public key to be used for authentication.
-Ensure this keypair is added to your local SSH agent so provisioners can
-connect.
-
-Example: ~/.ssh/aws-minecraft.pub
-DESCRIPTION
-
-  default = "~/.ssh/aws-minecraft.pub"
-}
+# =============================================================================
+#                                     AWS related variables
+# =============================================================================
 
 variable "ssh_key_name" {
   description = "Desired name of AWS key pair"
@@ -30,4 +20,48 @@ variable "aws_instance_type" {
 variable "aws_instance_name" {
   description = "AWS instance name."
   default     = "Minecraft server"
+}
+
+variable "ami_default" {
+  description = "Default base AMI"
+  default     = "ami-0bbc25e23a7640b9b"
+}
+
+variable "ami_custom" {
+  description = "Customized AMI"
+  default     = ""
+}
+
+# =============================================================================
+#                                     Minecraft related variables
+# =============================================================================
+
+variable "minecraft_group" {
+  description = "Default group for user running Minecraft server"
+  default     = "minecraft"
+}
+
+variable "minecraft_user" {
+  description = "Default user for running Minecraft server"
+  default     = "minecraft"
+}
+
+variable "minecraft_directory" {
+  description = "Default directory for installing Minecraft server"
+  default     = "/opt/minecraft"
+}
+
+variable "minecraft_java_opts" {
+  description = "Default java options for JVM running Minecraft server"
+  default     = "-Xms1024M -Xmx1024M"
+}
+
+variable "minecraft_download_url" {
+  description = "URL for downloading Minecraft server (1.14.4)"
+  default     = "https://launcher.mojang.com/v1/objects/3dc3d84a581f14691199cf6831b71ed1296a9fdf/server.jar"
+}
+
+variable "minecraft_server_filename" {
+  description = "Local filename for downloaded Minecraft server"
+  default     = "minecraft_server.jar"
 }

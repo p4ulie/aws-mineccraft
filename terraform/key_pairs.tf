@@ -1,4 +1,15 @@
-resource "aws_key_pair" "auth" {
+resource "tls_private_key" "minecraft_ssh_key" {
+  algorithm = "RSA"
+  rsa_bits  = 4096
+}
+
+resource "aws_key_pair" "minecraft_ssh_key" {
   key_name   = "${var.ssh_key_name}"
-  public_key = "${file(var.ssh_public_key_path)}"
+  public_key = "${tls_private_key.minecraft_ssh_key.public_key_openssh}"
+}
+
+output "minecraft_ssh_key" {
+  description = "SSH private key for Minecraft instances"
+  value       = "${tls_private_key.minecraft_ssh_key.private_key_pem}"
+  sensitive   = true
 }
