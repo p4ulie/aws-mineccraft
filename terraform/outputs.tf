@@ -19,3 +19,15 @@ output "public_ip" {
 output "public_dns" {
   value = "${aws_instance.minecraft_server.public_dns}"
 }
+
+output "minecraft_ssh_key_private" {
+  description = "SSH private key for Minecraft instances"
+  value       = "${tls_private_key.minecraft_ssh_key.private_key_pem}"
+  sensitive   = true
+}
+
+output "minecraft_ssh_key_public" {
+  description = "SSH public key for Minecraft instances"
+  value       = "${tls_private_key.minecraft_ssh_key.public_key_openssh}"
+  sensitive   = true
+}

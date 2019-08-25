@@ -1,7 +1,9 @@
 resource "aws_instance" "minecraft_server" {
   instance_type = "${var.aws_instance_type}"
   ami           = "${var.ami_default}"
-  key_name      = "${aws_key_pair.minecraft_ssh_key.id}"
+  key_name      = "${aws_key_pair.minecraft_ssh_key.key_name}"
+
+  iam_instance_profile = "minecraft_server_instance_profile"
 
   # Our Security group to allow network access to specified ports (SSH, ...)
   vpc_security_group_ids = ["${aws_security_group.minecraft_server.id}"]

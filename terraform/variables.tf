@@ -4,7 +4,7 @@
 
 variable "ssh_key_name" {
   description = "Desired name of AWS key pair"
-  default     = "aws-minecraft"
+  default     = "minecraft-ssh"
 }
 
 variable "aws_region" {
@@ -30,6 +30,11 @@ variable "ami_default" {
 variable "ami_custom" {
   description = "Customized AMI"
   default     = ""
+}
+
+variable "s3_bucket_name" {
+  description = "Name of S3 bucket to store Minecraft server world backups"
+  default     = "s3-minecraft-p4ulie-net-backup"
 }
 
 # =============================================================================
