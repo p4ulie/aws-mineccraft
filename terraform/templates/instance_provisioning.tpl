@@ -11,6 +11,10 @@
 # Install basic tools and utilities
 yum install -y screen
 
+# Install Java - Amazon Coretto
+amazon-linux-extras enable corretto8
+yum install -y java-1.8.0-amazon-corretto-devel
+
 # Create Minecraft group and user
 groupadd "${MINECRAFT_GROUP}"
 useradd --create-home --gid "${MINECRAFT_GROUP}" "${MINECRAFT_USER}"
