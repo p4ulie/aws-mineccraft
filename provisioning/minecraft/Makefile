@@ -4,7 +4,8 @@ application_service = $(application)
 #java_package = java-1.8.0-openjdk-headless
 java_package = java-1.8.0-openjdk-devel
 
-download_url = https://launcher.mojang.com/v1/objects/fe123682e9cb30031eae351764f653500b7396c9/server.jar
+# URL minecraft server 1.14.4
+download_url = https://launcher.mojang.com/v1/objects/3dc3d84a581f14691199cf6831b71ed1296a9fdf/server.jar
 
 base_dir = /opt
 
