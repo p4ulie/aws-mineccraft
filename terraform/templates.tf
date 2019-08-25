@@ -7,6 +7,9 @@ data "template_file" "instance_provisioning" {
     MINECRAFT_DIRECTORY       = "${var.minecraft_directory}"
     MINECRAFT_DOWNLOAD_URL    = "${var.minecraft_download_url}"
     MINECRAFT_SERVER_FILENAME = "${var.minecraft_server_filename}"
+    BEDROCK_USER              = "${var.bedrock_user}"
+    BEDROCK_GROUP             = "${var.bedrock_group}"
+    BEDROCK_DIRECTORY         = "${var.bedrock_directory}"
   }
 }
 

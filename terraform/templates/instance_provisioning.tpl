@@ -11,6 +11,12 @@
 # Install basic tools and utilities
 yum install -y screen
 
+# =============================================================================
+#                             Minecraft
+# =============================================================================
+
+# Install prerequisites
+
 # Install Java - Amazon Coretto
 amazon-linux-extras enable corretto8
 yum install -y java-1.8.0-amazon-corretto-devel
@@ -37,5 +43,21 @@ chown ${MINECRAFT_USER}:${MINECRAFT_GROUP} "${MINECRAFT_DIRECTORY}/bin/${MINECRA
 # create a file accepting EULA
 echo "eula=true" > "${MINECRAFT_DIRECTORY}/data/eula.txt"
 chown ${MINECRAFT_USER}:${MINECRAFT_GROUP} "${MINECRAFT_DIRECTORY}/data/eula.txt"
+
+# =============================================================================
+#                             Bedrock
+# =============================================================================
+
+# Install prerequisites
+# yum install -y ...
+
+# Create Pocketmine group and user
+groupadd "${BEDROCK_GROUP}"
+useradd --create-home --gid "${BEDROCK_GROUP}" "${BEDROCK_USER}"
+
+# Create installation and data directories
+mkdir -p "${BEDROCK_DIRECTORY}"
+
+chown ${BEDROCK_USER}:${BEDROCK_GROUP} "${BEDROCK_DIRECTORY}"
 
 exit 0

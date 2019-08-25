@@ -1,5 +1,5 @@
 # =============================================================================
-#                                     AWS related variables
+#                          AWS related variables
 # =============================================================================
 
 variable "ssh_key_name" {
@@ -38,7 +38,7 @@ variable "s3_bucket_name" {
 }
 
 # =============================================================================
-#                                     Minecraft related variables
+#                        Minecraft related variables
 # =============================================================================
 
 variable "minecraft_group" {
@@ -69,4 +69,23 @@ variable "minecraft_download_url" {
 variable "minecraft_server_filename" {
   description = "Local filename for downloaded Minecraft server"
   default     = "minecraft_server.jar"
+}
+
+# =============================================================================
+#                     Bedrock related variables
+# =============================================================================
+
+variable "bedrock_group" {
+  description = "Default group for user running Pocketmine server"
+  default     = "bedrock"
+}
+
+variable "bedrock_user" {
+  description = "Default user for running Pocketmine server"
+  default     = "bedrock"
+}
+
+variable "bedrock_directory" {
+  description = "Default directory for installing Pocketmine server"
+  default     = "/opt/bedrock"
 }
