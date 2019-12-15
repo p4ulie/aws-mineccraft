@@ -9,7 +9,7 @@ resource "aws_vpc" "minecraft_server" {
 
 # Create an internet gateway to give our subnet access to the outside world
 resource "aws_internet_gateway" "minecraft_server" {
-  vpc_id = "${aws_vpc.minecraft_server.id}"
+  vpc_id = aws_vpc.minecraft_server.id
 
   tags = {
     Name = "Minecraft"
@@ -18,14 +18,14 @@ resource "aws_internet_gateway" "minecraft_server" {
 
 # Grant the internet access on its main route table
 resource "aws_route" "internet_access" {
-  route_table_id         = "${aws_vpc.minecraft_server.main_route_table_id}"
+  route_table_id         = aws_vpc.minecraft_server.main_route_table_id
   destination_cidr_block = "0.0.0.0/0"
-  gateway_id             = "${aws_internet_gateway.minecraft_server.id}"
+  gateway_id             = aws_internet_gateway.minecraft_server.id
 }
 
 # Create a subnet to launch our instances into
 resource "aws_subnet" "minecraft_server" {
-  vpc_id                  = "${aws_vpc.minecraft_server.id}"
+  vpc_id                  = aws_vpc.minecraft_server.id
   cidr_block              = "10.0.0.0/24"
   map_public_ip_on_launch = true
 
@@ -39,7 +39,7 @@ resource "aws_subnet" "minecraft_server" {
 resource "aws_security_group" "minecraft_server" {
   name        = "minecraft-network-ports"
   description = "Used for the Minecraft server"
-  vpc_id      = "${aws_vpc.minecraft_server.id}"
+  vpc_id      = aws_vpc.minecraft_server.id
 
   # SSH access from anywhere
   ingress {

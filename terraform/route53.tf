@@ -1,8 +1,8 @@
 resource "aws_route53_zone" "minecraft_server" {
-  name = "minecraft.p4ulie.net"
+  name = var.minecraft_domain
 
   lifecycle {
-    ignore_changes = ["vpc"]
+    ignore_changes = [vpc]
   }
 
   tags = {

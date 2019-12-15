@@ -1,5 +1,5 @@
 resource "aws_s3_bucket" "minecraft_server" {
-  bucket = "${var.s3_bucket_name}"
+  bucket = var.s3_bucket_name
   acl    = "private"
 
   tags = {
