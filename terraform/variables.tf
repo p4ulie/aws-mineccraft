@@ -70,8 +70,8 @@ variable "minecraft_java_opts" {
 }
 
 variable "minecraft_download_url" {
-  description = "URL for downloading Minecraft server (1.14.4)"
-  default     = "https://launcher.mojang.com/v1/objects/3dc3d84a581f14691199cf6831b71ed1296a9fdf/server.jar"
+  description = "URL for downloading Minecraft server (1.20.4)"
+  default     = "https://piston-data.mojang.com/v1/objects/8dd1a28015f51b1803213892b50b7b4fc76e594d/server.jar"
 }
 
 variable "minecraft_server_filename" {
