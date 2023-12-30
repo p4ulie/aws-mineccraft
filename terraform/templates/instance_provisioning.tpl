@@ -46,8 +46,6 @@ curl --remote-time --progress-bar --location \
 chown ${MINECRAFT_USER}:${MINECRAFT_GROUP} "${MINECRAFT_DIRECTORY}/bin/${MINECRAFT_SERVER_FILENAME}"
 
 # prepare service definition file
-mv /home/ec2-user/minecraft.service /etc/systemd/system/minecraft.service
-chown root:root /etc/systemd/system/minecraft.service
 systemctl daemon-reload
 
 exit 0
