@@ -26,6 +26,6 @@ resource "aws_s3_bucket_acl" "minecraft_server" {
 resource "aws_s3_bucket_versioning" "minecraft_server" {
   bucket = aws_s3_bucket.minecraft_server.id
   versioning_configuration {
-    status = "Disabled"
+    status = "Enabled"
   }
 }
