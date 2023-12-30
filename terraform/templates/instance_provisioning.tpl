@@ -12,7 +12,7 @@
 yum install -y screen tmux
 
 # Install Java - Amazon Coretto
-yum install java-17-amazon-corretto-devel
+yum install -y java-17-amazon-corretto-devel
 
 # Create Minecraft group and user
 groupadd "${MINECRAFT_GROUP}"
