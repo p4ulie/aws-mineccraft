@@ -24,7 +24,7 @@ variable "aws_instance_name" {
 
 variable "ami_default" {
   description = "Default base AMI"
-  default     = "ami-0bbc25e23a7640b9b"
+  default     = "ami-02da8ff11275b7907"
 }
 
 variable "ami_custom" {
