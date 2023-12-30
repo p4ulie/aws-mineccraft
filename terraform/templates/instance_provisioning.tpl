@@ -31,11 +31,15 @@ chown ${MINECRAFT_USER}:${MINECRAFT_GROUP} "${MINECRAFT_DIRECTORY}/data/eula.txt
 
 # prepare backup script
 mv /home/ec2-user/backup_to_s3.sh "${MINECRAFT_DIRECTORY}/bin/backup_to_s3.sh"
-chown "${MINECRAFT_USER}:${MINECRAFT_GROUP}" /etc/systemd/system/minecraft.service
+chown "${MINECRAFT_USER}:${MINECRAFT_GROUP}" "${MINECRAFT_DIRECTORY}/bin/backup_to_s3.sh"
 
 # prepare restore script
 mv /home/ec2-user/restore_from_s3.sh "${MINECRAFT_DIRECTORY}/bin/restore_from_s3.sh"
-chown "${MINECRAFT_USER}:${MINECRAFT_GROUP}" /etc/systemd/system/minecraft.service
+chown "${MINECRAFT_USER}:${MINECRAFT_GROUP}" "${MINECRAFT_DIRECTORY}/bin/restore_from_s3.sh"
+
+# prepare service script
+mv /home/ec2-user/minecraft.service /etc/systemd/system/minecraft.service
+chown root:root /etc/systemd/system/minecraft.service
 
 # download the Minecraft server file and set owner of file
 curl --remote-time --progress-bar --location \
