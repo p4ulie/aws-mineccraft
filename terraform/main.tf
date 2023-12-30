@@ -12,9 +12,7 @@ resource "aws_instance" "minecraft_server" {
   vpc_security_group_ids = ["${aws_security_group.minecraft_server.id}"]
   subnet_id              = "${aws_subnet.minecraft_server.id}"
 
-  tags {
-    Name = "${var.aws_instance_name}"
-  }
+  tags   = var.aws_tags
 
   # connection {
   #   user = "ec2-user"

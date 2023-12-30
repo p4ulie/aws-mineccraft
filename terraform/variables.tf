@@ -34,7 +34,15 @@ variable "ami_custom" {
 
 variable "s3_bucket_name" {
   description = "Name of S3 bucket to store Minecraft server world backups"
-  default     = "s3-minecraft-p4ulie-net-backup"
+  default     = "s3-minecraft-p4ulie-net-world-backup"
+}
+
+variable "aws_tags" {
+  type        = map(string)
+  description = "Tags to add to all resources."
+  default = {
+    "project" = "aws-minecraft"
+  }
 }
 
 # =============================================================================
