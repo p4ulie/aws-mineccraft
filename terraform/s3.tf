@@ -1,14 +1,7 @@
 resource "aws_s3_bucket" "minecraft_server" {
   bucket = "${var.s3_bucket_name}"
-  acl    = "private"
 
-  tags = {
-    Name = "minecraft_p4ulie_net_backup"
-  }
-
-  versioning {
-    enabled = true
-  }
+  tags = var.aws_tags
 
   # transition {
   #   days          = 30
@@ -23,4 +16,16 @@ resource "aws_s3_bucket" "minecraft_server" {
   # expiration {
   #   days = 90
   # }
+}
+
+resource "aws_s3_bucket_acl" "minecraft_server" {
+  bucket = aws_s3_bucket.minecraft_server.id
+  acl    = "private"
+}
+
+resource "aws_s3_bucket_versioning" "minecraft_server" {
+  bucket = aws_s3_bucket.minecraft_server.id
+  versioning_configuration {
+    status = "Disabled"
+  }
 }
