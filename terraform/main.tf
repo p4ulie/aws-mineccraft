@@ -38,17 +38,25 @@ resource "aws_instance" "minecraft_server" {
     destination = "/home/ec2-user/restore_from_s3.sh"
   }
 
-  provisioner "remote-exec" {
-    inline = [
-      "sudo mv /home/ec2-user/minecraft.service /etc/systemd/system/minecraft.service",
-      "sudo chown root:root /etc/systemd/system/minecraft.service",
-      "sudo systemctl daemon-reload",
-      "sudo mv /home/ec2-user/backup_to_s3.sh ${var.minecraft_directory}/bin/backup_to_s3.sh",
-      "sudo chown ${var.minecraft_user}:${var.minecraft_group} /etc/systemd/system/minecraft.service",
-      "sudo mv /home/ec2-user/restore_from_s3.sh ${var.minecraft_directory}/bin/restore_from_s3.sh",
-      "sudo chown ${var.minecraft_user}:${var.minecraft_group} /etc/systemd/system/minecraft.service",
-    ]
-  }
+#  provisioner "remote-exec" {
+#    inline = [
+#      "groupadd ${var.minecraft_group}",
+#      "useradd --create-home --gid ${var.minecraft_group} ${var.minecraft_user}",
+#      "mkdir -p ${var.minecraft_directory}",
+#      "mkdir -p ${var.minecraft_directory}/data",
+#      "mkdir -p ${var.minecraft_directory}/bin",
+#      "chown -R ${minecraft_user}:${minecraft_group} ${minecraft_directory}",
+#      "sudo mv /home/ec2-user/minecraft.service /etc/systemd/system/minecraft.service",
+#      "sudo chown root:root /etc/systemd/system/minecraft.service",
+#      "sudo systemctl daemon-reload",
+#      "sudo mv /home/ec2-user/backup_to_s3.sh ${var.minecraft_directory}/bin/backup_to_s3.sh",
+#      "sudo chown ${var.minecraft_user}:${var.minecraft_group} /etc/systemd/system/minecraft.service",
+#      "sudo mv /home/ec2-user/restore_from_s3.sh ${var.minecraft_directory}/bin/restore_from_s3.sh",
+#      "sudo chown ${var.minecraft_user}:${var.minecraft_group} /etc/systemd/system/minecraft.service",
+#      "echo 'eula=true' > ${var.minecraft_directory}/data/eula.txt",
+#      "chown ${var.minecraft_user}:${var.minecraft_group} ${var.minecraft_directory}/data/eula.txt",
+#    ]
+#  }
 
   # generated script for provision the instance
   # user_data = "${base64encode(data.template_file.instance_provisioning.rendered)}"

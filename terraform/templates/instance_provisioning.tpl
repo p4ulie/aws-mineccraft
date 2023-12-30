@@ -9,7 +9,7 @@
 # =============================================================================
 
 # Install basic tools and utilities
-yum install -y screen
+yum install -y screen tmux
 
 # Install Java - Amazon Coretto
 amazon-linux-extras enable corretto8
@@ -26,6 +26,18 @@ mkdir -p "${MINECRAFT_DIRECTORY}/bin"
 
 chown -R ${MINECRAFT_USER}:${MINECRAFT_GROUP} "${MINECRAFT_DIRECTORY}"
 
+# create a file accepting EULA
+echo "eula=true" > "${MINECRAFT_DIRECTORY}/data/eula.txt"
+chown ${MINECRAFT_USER}:${MINECRAFT_GROUP} "${MINECRAFT_DIRECTORY}/data/eula.txt"
+
+# prepare backup script
+mv /home/ec2-user/backup_to_s3.sh "${MINECRAFT_DIRECTORY}/bin/backup_to_s3.sh"
+chown "${MINECRAFT_USER}:${MINECRAFT_GROUP}" /etc/systemd/system/minecraft.service
+
+# prepare restore script
+mv /home/ec2-user/restore_from_s3.sh "${MINECRAFT_DIRECTORY}/bin/restore_from_s3.sh"
+chown "${MINECRAFT_USER}:${MINECRAFT_GROUP}" /etc/systemd/system/minecraft.service
+
 # download the Minecraft server file and set owner of file
 curl --remote-time --progress-bar --location \
 	--time-cond "${MINECRAFT_DIRECTORY}/bin/${MINECRAFT_SERVER_FILENAME}" \
@@ -34,8 +46,9 @@ curl --remote-time --progress-bar --location \
 
 chown ${MINECRAFT_USER}:${MINECRAFT_GROUP} "${MINECRAFT_DIRECTORY}/bin/${MINECRAFT_SERVER_FILENAME}"
 
-# create a file accepting EULA
-echo "eula=true" > "${MINECRAFT_DIRECTORY}/data/eula.txt"
-chown ${MINECRAFT_USER}:${MINECRAFT_GROUP} "${MINECRAFT_DIRECTORY}/data/eula.txt"
+# prepare service definition file
+mv /home/ec2-user/minecraft.service /etc/systemd/system/minecraft.service
+chown root:root /etc/systemd/system/minecraft.service
+systemctl daemon-reload
 
 exit 0
