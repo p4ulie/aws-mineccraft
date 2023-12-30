@@ -14,7 +14,7 @@ variable "aws_region" {
 
 variable "aws_instance_type" {
   description = "AWS instance type."
-  default     = "t2.medium"
+  default     = "t2.small"
 }
 
 variable "aws_instance_name" {
