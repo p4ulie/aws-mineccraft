@@ -29,7 +29,7 @@ variable "ami_default" {
 
 variable "ami_custom" {
   description = "Customized AMI"
-  default     = ""
+  default     = "ami-0b9f58a24b62b2903"
 }
 
 variable "s3_bucket_name" {
