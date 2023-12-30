@@ -14,25 +14,41 @@ resource "aws_instance" "minecraft_server" {
 
   tags   = var.aws_tags
 
-  # connection {
-  #   user = "ec2-user"
-  #   private_key = ""
-  # }
+  connection {
+    user = "ec2-user"
+    private_key = tls_private_key.minecraft_ssh_key.private_key_openssh
+    host = self.public_ip
+  }
 
+  # Copies generated SystemD service file
+  provisioner "file" {
+    content     = "${data.template_file.minecraft_systemd_service.rendered}"
+    destination = "/home/ec2-user/minecraft.service"
+  }
 
-  # # Copies generated SystemD service file
-  # provisioner "file" {
-  #   content     = "${data.template_file.instance_provisioning.rendered}"
-  #   destination = "/home/ec2-user/minecraft.service"
-  # }
+  # Copies backup script
+  provisioner "file" {
+    content     = "${data.template_file.backup_to_s3.rendered}"
+    destination = "/home/ec2-user/backup_to_s3.sh"
+  }
 
+  # Copies restore script
+  provisioner "file" {
+    content     = "${data.template_file.restore_from_s3.rendered}"
+    destination = "/home/ec2-user/restore_from_s3.sh"
+  }
 
-  # provisioner "remote-exec" {
-  #   inline = [
-  #     "sudo mv /home/ec2-user/minecraft.service /etc/systemd/system/minecraft.service",
-  #     "sudo daemon-reload",
-  #   ]
-  # }
+  provisioner "remote-exec" {
+    inline = [
+      "sudo mv /home/ec2-user/minecraft.service /etc/systemd/system/minecraft.service",
+      "sudo chown root:root /etc/systemd/system/minecraft.service",
+      "sudo systemctl daemon-reload",
+      "sudo mv /home/ec2-user/backup_to_s3.sh ${var.minecraft_directory}/bin/backup_to_s3.sh",
+      "sudo chown ${var.minecraft_user}:${var.minecraft_group} /etc/systemd/system/minecraft.service",
+      "sudo mv /home/ec2-user/restore_from_s3.sh ${var.minecraft_directory}/bin/restore_from_s3.sh",
+      "sudo chown ${var.minecraft_user}:${var.minecraft_group} /etc/systemd/system/minecraft.service",
+    ]
+  }
 
   # generated script for provision the instance
   # user_data = "${base64encode(data.template_file.instance_provisioning.rendered)}"
