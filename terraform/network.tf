@@ -49,11 +49,19 @@ resource "aws_security_group" "minecraft_server" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  # Minecraft access from anywhere
+  # Minecraft access from anywhere (tcp)
   ingress {
     from_port   = 25565
     to_port     = 25565
     protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  # Minecraft access from anywhere (UDP)
+  ingress {
+    from_port   = 25565
+    to_port     = 25565
+    protocol    = "udp"
     cidr_blocks = ["0.0.0.0/0"]
   }
 
