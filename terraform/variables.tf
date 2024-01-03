@@ -14,7 +14,7 @@ variable "aws_region" {
 
 variable "aws_instance_type" {
   description = "AWS instance type."
-  default     = "t2.micro"
+  default     = "t2.small"
 }
 
 variable "aws_instance_name" {
@@ -66,7 +66,7 @@ variable "minecraft_directory" {
 
 variable "minecraft_java_opts" {
   description = "Default java options for JVM running Minecraft server"
-  default     = "-Xms900M -Xmx900M"
+  default     = "-Xms1500M -Xmx1500M"
 }
 
 variable "minecraft_download_url" {
