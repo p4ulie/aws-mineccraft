@@ -66,7 +66,7 @@ variable "minecraft_directory" {
 
 variable "minecraft_java_opts" {
   description = "Default java options for JVM running Minecraft server"
-  default     = "-Xms1500M -Xmx1500M"
+  default     = "-Xms500M -Xmx1500M"
 }
 
 variable "minecraft_download_url" {
