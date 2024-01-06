@@ -63,10 +63,19 @@ resource "aws_instance" "minecraft_server" {
   user_data = "${var.ami_custom == "" ? base64encode(data.template_file.instance_provisioning.rendered) : base64encode(data.template_file.instance_configuration.rendered)}"
 }
 
+resource "aws_eip" "minecraft_server" {
+  domain   = "vpc"
+}
+
+resource "aws_eip_association" "minecraft_server" {
+  instance_id   = aws_instance.minecraft_server.id
+  allocation_id = aws_eip.minecraft_server.id
+}
+
 resource "aws_route53_record" "minecraft_server" {
   zone_id = "${aws_route53_zone.minecraft_server.zone_id}"
   name    = "server"
   type    = "A"
   ttl     = "300"
-  records = ["${aws_instance.minecraft_server.public_ip}"]
+  records = ["${aws_eip.minecraft_server.public_ip}"]
 }
